@@ -1,15 +1,13 @@
 package com.estudos.course.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
+@Table(name = "tb_user")
 // Para que a classe seja serializável, ou seja, que seus objetos possam ser convertidos em bytes para serem transmitidos pela rede ou armazenados em arquivos.
 public class User implements Serializable {
 
