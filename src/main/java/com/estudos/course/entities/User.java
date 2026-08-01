@@ -1,5 +1,6 @@
 package com.estudos.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,6 +35,15 @@ public class User implements Serializable {
     // O atributo mappedBy é usado para indicar que a relação é bidirecional e que o lado "muitos"
     // da relação (Order) é o responsável por manter a referência ao lado
     // Esse muitos para um é mapeado pelo atributo "client" na classe Order, que é a referência ao usuário associado a cada pedido.
+    // Para evitar problemas de serialização e desserialização, como loops infinitos, quando a classe User é convertida para JSON.
+    //Lazy loading é uma estratégia de carregamento de dados em que os dados relacionados a uma entidade
+    // são carregados apenas quando são realmente necessários, e não no momento em que a entidade principal é carregada.
+    // Isso pode melhorar o desempenho da aplicação, evitando consultas desnecessárias ao banco de dados.
+
+    // A anotação @JsonIgnore é usada para ignorar a propriedade "orders" durante a serialização e desserialização do objeto User.
+    // Assim quando um usuário é convertido para JSON, a propriedade "orders" não será incluída na representação JSON do usuário.
+    // Só os atributos do usuário serão incluídos, evitando a referência circular entre User e Order.
+    @JsonIgnore
     @OneToMany(mappedBy = "client")
     private final List<Order> orders = new ArrayList<>();
 
