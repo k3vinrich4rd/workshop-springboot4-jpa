@@ -1,9 +1,16 @@
 package com.estudos.course.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -22,6 +29,13 @@ public class User implements Serializable {
     private String email;
     private String phone;
     private String password;
+
+    // A anotação @OneToMany indica que a relação entre User e Order é de um para muitos, ou seja, um usuário pode ter muitos pedidos.
+    // O atributo mappedBy é usado para indicar que a relação é bidirecional e que o lado "muitos"
+    // da relação (Order) é o responsável por manter a referência ao lado
+    // Esse muitos para um é mapeado pelo atributo "client" na classe Order, que é a referência ao usuário associado a cada pedido.
+    @OneToMany(mappedBy = "client")
+    private final List<Order> orders = new ArrayList<>();
 
     public User(Long id, String name, String email, String phone, String password) {
         this.id = id;
@@ -72,6 +86,10 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
     }
 
     @Override
