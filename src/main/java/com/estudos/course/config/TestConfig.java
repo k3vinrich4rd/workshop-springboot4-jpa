@@ -1,7 +1,7 @@
 package com.estudos.course.config;
 
 import com.estudos.course.entities.User;
-import com.estudos.course.repository.UserRepository;
+import com.estudos.course.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
