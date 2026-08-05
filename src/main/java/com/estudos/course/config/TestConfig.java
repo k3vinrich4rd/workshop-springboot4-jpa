@@ -1,8 +1,10 @@
 package com.estudos.course.config;
 
+import com.estudos.course.entities.Category;
 import com.estudos.course.entities.Order;
 import com.estudos.course.entities.User;
 import com.estudos.course.entities.enums.OrderStatus;
+import com.estudos.course.repositories.CategoryRepository;
 import com.estudos.course.repositories.OrderRepository;
 import com.estudos.course.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ import java.util.Arrays;
 
 //CommandLineRunner é uma interface do Spring Boot que permite executar código específico após a inicialização do aplicativo.
 // A classe TestConfig implementa essa interface, o que significa que o método run será executado automaticamente quando o aplicativo for iniciado.
-public class TestConfig  implements CommandLineRunner {
+public class TestConfig implements CommandLineRunner {
 
     // A anotação @Autowired é usada para injetar automaticamente a dependência do UserRepository na classe TestConfig.
     // Isso significa que o Spring irá fornecer uma instância do UserRepository para ser usada dentro da classe TestConfig,
@@ -32,8 +34,17 @@ public class TestConfig  implements CommandLineRunner {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Override
     public void run(String... args) throws Exception {
+
+        Category cat1 = new Category(null, "Electronics");
+        Category cat2 = new Category(null, "Books");
+        Category cat3 = new Category(null, "Computers");
+
+
         User u1 = new User(null, "Maria Brown", "maria@gmail.com", "988888888", "123456");
         User u2 = new User(null, "Alex Green", "alex@gmail.com", "977777777", "123456");
 
@@ -44,5 +55,6 @@ public class TestConfig  implements CommandLineRunner {
 
         userRepository.saveAll(Arrays.asList(u1, u2));
         orderRepository.saveAll(Arrays.asList(o1, o2, o3));
+        categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
     }
 }
