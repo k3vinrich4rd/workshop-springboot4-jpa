@@ -1,5 +1,6 @@
 package com.estudos.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -16,7 +17,19 @@ public class Category implements Serializable {
     private Long id;
     private String name;
 
-    //ManyToMany porque uma categoria pode ter vários produtos e um produto pode ter várias categorias.
+    // Relação ManyToMany: uma Category pode estar associada a vários Product,
+    // e um Product pode estar associado a várias Category.
+
+    // mappedBy = "categories" indica que esta classe não é a dona da relação.
+    // O atributo "categories" existe na classe Product e é nela que o relacionamento
+    // é configurado como lado proprietário (owning side).
+
+    // Nesta classe Category, o JPA apenas espelha o relacionamento.
+    // Isso significa que a tabela de junção é controlada pela classe Product.
+
+    // Como a relação aparece nos dois lados (Product e Category), ela é bidirecional.
+    @JsonIgnore // Evita referência circular durante a serialização para JSON.
+    @ManyToMany(mappedBy = "categories")
     private Set<Product> products = new HashSet<>();
 
     public Category(Long id, String name) {

@@ -1,11 +1,6 @@
 package com.estudos.course.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -27,7 +22,19 @@ public class Product implements Serializable {
 
     //Set porque não pode ter repetição de categorias, e o Set é uma coleção que não permite elementos duplicados.
     //Coleção instanciada como HashSet, que é uma implementação concreta da interface Set, que armazena os elementos em uma tabela hash, permitindo acesso rápido aos elementos.
-    @Transient
+
+    @ManyToMany
+    //A anotação @JoinTable é usada para definir a tabela de junção que será usada para mapear a relação ManyToMany entre Product e Category.
+    //A tabela de junção é uma tabela intermediária que contém as chaves estrangeiras das duas entidades envolvidas na relação ManyToMany.
+    //A anotação @JoinTable permite que você configure o nome da tabela de junção e os nomes das colunas que representam as chaves estrangeiras das entidades envolvidas na relação.
+    //joinColumns = @JoinColumn(name = "product_id") define a coluna que representa a chave estrangeira da entidade Product na tabela de junção.
+    //inverseJoinColumns = @JoinColumn(name = "category_id") define a coluna que representa a chave estrangeira da entidade Category na tabela de junção.
+    @JoinTable(
+            name = "tb_product_category",
+            joinColumns = @JoinColumn (name = "product_id"),
+            inverseJoinColumns = @JoinColumn (name = "category_id")
+
+    )
     private Set<Category> categories = new HashSet<>();
 
     //Não se coloca o setCategories porque não se quer que a lista de categorias
