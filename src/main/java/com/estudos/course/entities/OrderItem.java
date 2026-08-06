@@ -1,6 +1,7 @@
 package com.estudos.course.entities;
 
 import com.estudos.course.entities.pk.OrderItemPK;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -23,7 +24,8 @@ public class OrderItem implements Serializable {
     // - order   → qual pedido
     // - product → qual produto
     // O @EmbeddedId diz ao JPA para tratar OrderItemPK como chave composta.
-    private OrderItemPK id = new OrderItemPK();
+    // Sempre instancie OrderItemPK por conta da sua chave ser composta.
+    private final OrderItemPK id = new OrderItemPK();
 
     // Quantidade do produto neste item do pedido.
     private Integer quantity;
@@ -50,6 +52,8 @@ public class OrderItem implements Serializable {
     // Os getters/setters de Order e Product delegam para dentro da chave composta (id),
     // pois Order e Product não são campos diretos de OrdemItem,
     // eles vivem dentro do objeto OrderItemPK.
+
+    @JsonIgnore // Evita referência cíclica na serialização JSON.
     public Order getOrder() {
         return id.getOrder();
     }

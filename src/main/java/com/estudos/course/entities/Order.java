@@ -2,17 +2,13 @@ package com.estudos.course.entities;
 
 import com.estudos.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_order")
@@ -39,6 +35,14 @@ public class Order implements Serializable {
     @ManyToOne
     @JoinColumn(name = "client_id")
     private User client;
+
+    //items é uma coleção do tipo Set que armazena os itens do pedido.
+    // A anotação @OneToMany indica que a relação entre Order e OrderItem
+    // é de um para muitos, ou seja, um pedido pode ter muitos itens.
+    // id.order é o nome do atributo que faz referência à chave primária
+    // composta da entidade OrderItem, que é a associação entre Order e Product.
+    @OneToMany(mappedBy = "id.order")
+    private final Set<OrderItem> items = new HashSet<>();
 
     public Order(Long id, Instant moment, User client, OrderStatus orderStatus) {
         this.id = id;
@@ -95,6 +99,10 @@ public class Order implements Serializable {
 
         Order order = (Order) o;
         return Objects.equals(id, order.id);
+    }
+
+    public Set<OrderItem> getItems() {
+        return items;
     }
 
     @Override
