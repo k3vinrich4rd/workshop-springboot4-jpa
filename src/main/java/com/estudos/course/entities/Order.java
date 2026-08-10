@@ -44,6 +44,15 @@ public class Order implements Serializable {
     @OneToMany(mappedBy = "id.order")
     private final Set<OrderItem> items = new HashSet<>();
 
+
+    // A anotação @OneToOne indica que a relação entre Order e Payment é de um para um,
+    // ou seja, cada pedido pode ter um único pagamento associado.
+    // A anotação cascade = CascadeType.ALL é usada para propagar todas as operações de persistência
+    // (como salvar, atualizar, excluir) realizadas na entidade Order para a entidade Payment associada
+    // Isso significa que, ao salvar um pedido, o pagamento associado também será salvo automaticamente.
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
+
     public Order(Long id, Instant moment, User client, OrderStatus orderStatus) {
         this.id = id;
         this.moment = moment;
@@ -91,6 +100,18 @@ public class Order implements Serializable {
 
     public void setClient(User client) {
         this.client = client;
+    }
+
+    public void setOrderStatus(Integer orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 
     @Override

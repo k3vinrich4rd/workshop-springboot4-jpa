@@ -88,5 +88,11 @@ public class TestConfig implements CommandLineRunner {
 
         // Salva os itens de pedido no banco de dados usando o repositório correspondente.
         orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
+
+        // Cria um pagamento associado ao pedido o1 e define o pagamento no pedido.
+        Payment pay1 = new Payment(null, Instant.parse("2019-06-20T21:53:07Z"), o1);
+        o1.setPayment(pay1);
+
+        orderRepository.save(o1); // Salva o pedido atualizado com o pagamento no banco de dados usando o repositório correspondente.
     }
 }
