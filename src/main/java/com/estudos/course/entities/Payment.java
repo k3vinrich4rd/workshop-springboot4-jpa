@@ -1,5 +1,6 @@
 package com.estudos.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -21,6 +22,7 @@ public class Payment implements Serializable {
     // A anotação @MapsId é usada para indicar que a chave primária da entidade Payment é a mesma chave primária da entidade Order.
     // Isso significa que o campo id da entidade Payment será mapeado para o campo id da entidade
     // Order, estabelecendo uma relação de compartilhamento de chave primária entre as duas entidades.
+    @JsonIgnore // Evita referência cíclica na serialização JSON, impedindo que a entidade Order seja incluída na representação JSON do Payment.
     @OneToOne
     @MapsId
     @JoinColumn(name = "order_id")
