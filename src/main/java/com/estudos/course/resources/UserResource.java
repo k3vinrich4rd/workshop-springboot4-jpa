@@ -5,11 +5,10 @@ import com.estudos.course.entities.User;
 import com.estudos.course.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -34,6 +33,21 @@ public class UserResource {
     public ResponseEntity<User> findById(@PathVariable Long id) {
         User obj = service.findById(id);
         return ResponseEntity.ok().body(obj);
+    }
+
+    // O método save é responsável por salvar um novo usuário no banco de dados.
+    // Ele recebe um objeto User como parâmetro, que é enviado no corpo da requisição (request body) em formato JSON.
+    // A anotação @RequestBody indica que o objeto User será desserializado a partir do corpo da requisição.
+    // O método chama o serviço UserService para salvar o usuário e retorna uma resposta HTTP com o status 200 (OK)
+    //  e o objeto User salvo no corpo da resposta.
+    // O ResponseEntity é uma classe do Spring que representa a resposta HTTP completa
+    // , permitindo definir o status, cabeçalhos e corpo da resposta.
+    @PostMapping
+    public ResponseEntity<User> save(@RequestBody User user) {
+        User obj = service.insert(user);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).body(obj);
     }
 
 }
