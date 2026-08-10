@@ -1,5 +1,6 @@
 package com.estudos.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -48,6 +49,13 @@ public class Product implements Serializable {
         this.price = price;
         this.imgUrl = imgUrl;
     }
+
+    //A anotação @OneToMany é usada para definir o relacionamento entre a entidade Product e a entidade OrderItem.
+    //O atributo mappedBy é usado para indicar que a entidade OrderItem é a dona do relacionamento,
+    // ou seja, é a entidade que possui a chave estrangeira que referencia a entidade Product.
+
+    @OneToMany(mappedBy = "id.product")
+    private Set<OrderItem> items = new HashSet<>();
 
     public Product() {
 
@@ -100,9 +108,20 @@ public class Product implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-
         Product product = (Product) o;
         return Objects.equals(id, product.id);
+    }
+
+    @JsonIgnore
+    //O método getOrders() é usado para obter um conjunto de pedidos (Order) associados a um produto (Product).
+    //Ele percorre a coleção de itens (OrderItem) associados ao produto e adiciona os pedidos
+    // correspondentes ao conjunto de pedidos (Set<Order>) que será retornado.
+    public Set<Order> getOrders() {
+        Set<Order> set = new HashSet<>();
+        for (OrderItem x : items) {
+            set.add(x.getOrder());
+        }
+        return set;
     }
 
     @Override
