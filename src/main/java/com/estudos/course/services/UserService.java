@@ -33,4 +33,22 @@ public class UserService {
     public User insert(User user) {
         return repository.save(user);
     }
+
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
+
+    public User update(Long id, User user) {
+        //O método getOne é usado para obter uma referência à entidade User
+        // com o ID especificado, sem realmente buscar os dados do banco de dados.
+        User entity = repository.getOne(id);
+        updateData(entity, user);
+        return repository.save(entity);
+    }
+
+    private void updateData(User entity, User user) {
+        entity.setName(user.getName());
+        entity.setEmail(user.getEmail());
+        entity.setPhone(user.getPhone());
+    }
 }
