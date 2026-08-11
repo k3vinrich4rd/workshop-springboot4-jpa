@@ -2,6 +2,7 @@ package com.estudos.course.services;
 
 import com.estudos.course.entities.User;
 import com.estudos.course.repositories.UserRepository;
+import com.estudos.course.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,9 @@ public class UserService {
 
     public User findById(Long id) {
         Optional<User> obj = repository.findById(id);
-        return obj.get();
+        // O método orElseThrow é usado para lidar com o caso em que o usuário não é encontrado no banco de dados.
+        // Se o usuário não for encontrado, ele lança uma exceção ResourceNotFoundException com uma mensagem personalizada.
+        return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     // O método save é responsável por salvar um novo usuário no banco de dados.
