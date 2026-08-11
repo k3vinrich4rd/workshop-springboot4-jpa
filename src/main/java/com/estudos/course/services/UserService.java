@@ -4,6 +4,7 @@ import com.estudos.course.entities.User;
 import com.estudos.course.repositories.UserRepository;
 import com.estudos.course.services.exceptions.DatabaseException;
 import com.estudos.course.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -50,11 +51,16 @@ public class UserService {
     }
 
     public User update(Long id, User user) {
-        //O método getOne é usado para obter uma referência à entidade User
-        // com o ID especificado, sem realmente buscar os dados do banco de dados.
-        User entity = repository.getOne(id);
-        updateData(entity, user);
-        return repository.save(entity);
+        try {
+            //O método getOne é usado para obter uma referência à entidade User
+            // com o ID especificado, sem realmente buscar os dados do banco de dados.
+            User entity = repository.getOne(id);
+            updateData(entity, user);
+            return repository.save(entity);
+
+        } catch (EntityNotFoundException e ) {
+            throw new ResourceNotFoundException(id);
+        }
     }
 
     private void updateData(User entity, User user) {
